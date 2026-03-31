@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Slow & Smooth Artisan Animations for About Page */
+    .about-reveal {
+        opacity: 0;
+        visibility: hidden;
+        transition: all 2.2s cubic-bezier(0.16, 1, 0.3, 1); /* Much slower and smoother */
+    }
+    .about-reveal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(0, 0) scale(1) !important;
+    }
+
+    /* Initial Offsets */
+    .about-up { transform: translateY(100px); }
+    .about-left { transform: translateX(-100px); }
+    .about-zoom { transform: scale(0.9); }
+
+    /* Card Hover Effect: Enlarge Slightly */
+    .glass-card {
+        transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .glass-card:hover {
+        transform: translateY(-20px) scale(1.05) !important;
+        box-shadow: 0 50px 100px rgba(0,0,0,0.9), 0 0 30px rgba(212, 175, 55, 0.15) !important;
+        border-color: var(--primary) !important;
+    }
+
+    /* Artisan Hero Page Load Animation */
+    @keyframes artisanHeroRise {
+        0% { opacity: 0; transform: translateY(120px); filter: blur(10px); }
+        100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+    .hero-artisan-load {
+        animation: artisanHeroRise 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Custom Delays for staggered storytelling */
+    .delay-500 { transition-delay: 500ms; }
+    .delay-800 { transition-delay: 800ms; }
+    .delay-1100 { transition-delay: 1100ms; }
+    .delay-1400 { transition-delay: 1400ms; }
+</style>
+<section class="hero" style="position: relative; height: 75vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; background: #000;">
+    <!-- Cinematic Background Image with specific coverage and no-repeat -->
+    <div style="position: absolute; inset: 0; background-image: url('{% static 'images/about_hero.png' %}'); background-size: cover; background-position: center; background-repeat: no-repeat; opacity: 1; filter: contrast(105%) brightness(0.95);"></div>
+    
+    <!-- Premium Shaded Overlay: Darker in text areas (center) and borders -->
+    <div class="hero-overlay" style="position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(5, 5, 5, 0.95) 0%, rgba(5, 5, 5, 0.4) 45%, rgba(5, 5, 5, 1) 100%); z-index: 1; backdrop-filter: blur(5px);"></div>
+    
+    <div class="hero-content hero-artisan-load" style="max-width: 1000px; position: relative; z-index: 10; opacity: 0;">
+        <span class="hero-badge" style="margin-bottom: 2.5rem; display: inline-block; padding: 12px 28px; border: 1px solid var(--primary); border-radius: 50px; color: var(--primary); font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3.5px; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px);">The Legacy</span>
+        <h1 style="font-size: 4.8rem; font-weight: 800; margin-bottom: 2rem; line-height: 1.1; color: #fff;">Precision <span style="color: var(--primary);">Engineering</span> Meets Art</h1>
+        <p style="color: var(--text-muted); font-size: 1.45rem; line-height: 1.8; max-width: 850px; margin: 0 auto;">Kochi's most exclusive destination for automotive restoration and surface preservation.</p>
+    </div>
+</section>
+
+<section class="section" style="padding: 10rem 0;">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center; margin-bottom: 12rem;">
+            <div class="reveal about-reveal about-left">
+                <span style="color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 4px; font-size: 0.8rem; margin-bottom: 1.5rem; display: block;">Established 2012</span>
+                <h2 style="font-size: 3.5rem; margin-bottom: 2.5rem; line-height: 1.1;">Who <span>We Are</span></h2>
+                <div style="color: var(--text-muted); font-size: 1.15rem; line-height: 2;">
+                    <p style="margin-bottom: 2.5rem;">
+                        404 Car Care was founded on a singular vision: to bridge the gap between ordinary car care and obsessive automotive restoration. In the heart of Kochi, we have cultivated a space where the world's finest vehicles receive the standard of care they deserve.
+                    </p>
+                    <p>
+                        Our artisans are not just technicians; they are certified detailers who treat every surface with surgical precision. We utilize the planet's most advanced molecular coatings and pH-neutral purification systems to achieve a finish that is nothing short of breathtaking.
+                    </p>
+                </div>
+            </div>
+            <div class="reveal about-reveal about-zoom delay-500" style="position: relative; border-radius: 30px; overflow: hidden; height: 600px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); border: 1px solid var(--border-glass);">
+                <img src="{% static 'images/about_who_we_are.png' %}" alt="Our Craft" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; inset: 0; background: radial-gradient(circle at center, transparent, rgba(0,0,0,0.4));"></div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4rem;">
+            <!-- Card 1 -->
+            <div class="glass-card reveal about-reveal about-up" style="padding: 4.5rem; text-align: center; border-radius: 30px;">
+                <div class="service-icon" style="background: rgba(212, 175, 55, 0.12); width: 85px; height: 85px; margin: 0 auto 3rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <i class="fas fa-microchip" style="font-size: 2rem; color: var(--primary);"></i>
+                </div>
+                <h3 style="font-size: 1.8rem; color: #fff; margin-bottom: 2rem; font-family: 'Outfit'; font-weight: 700;">Nano Excellence</h3>
+                <p style="color: var(--text-muted); line-height: 2; font-size: 1.1rem;">Utilizing molecular-level surface bonding for protection that lasts longer than any conventional wax.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="glass-card reveal about-reveal about-up delay-500" style="padding: 4.5rem; text-align: center; border-radius: 30px;">
+                <div class="service-icon" style="background: rgba(212, 175, 55, 0.12); width: 85px; height: 85px; margin: 0 auto 3rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <i class="fas fa-user-shield" style="font-size: 2rem; color: var(--primary);"></i>
+                </div>
+                <h3 style="font-size: 1.8rem; color: #fff; margin-bottom: 2rem; font-family: 'Outfit'; font-weight: 700;">Certified Talent</h3>
+                <p style="color: var(--text-muted); line-height: 2; font-size: 1.1rem;">Our team is home to master detailers trained in the world's most rigorous certification programs.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="glass-card reveal about-reveal about-up delay-800" style="padding: 4.5rem; text-align: center; border-radius: 30px;">
+                <div class="service-icon" style="background: rgba(212, 175, 55, 0.12); width: 85px; height: 85px; margin: 0 auto 3rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <i class="fas fa-vial" style="font-size: 2rem; color: var(--primary);"></i>
+                </div>
+                <h3 style="font-size: 1.8rem; color: #fff; margin-bottom: 2rem; font-family: 'Outfit'; font-weight: 700;">Pure Chemistry</h3>
+                <p style="color: var(--text-muted); line-height: 2; font-size: 1.1rem;">Exclusively using PH-neutral chemical systems to ensure the zero-impact cleaning of your valuable surfaces.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="padding-bottom: 12rem;">
+    <div class="container reveal about-reveal about-up delay-1100" style="max-width: 1000px; text-align: center;">
+        <div style="background: var(--bg-glass); padding: 6rem; border-radius: 40px; border: 1px solid var(--border-glass); position: relative;">
+            <i class="fas fa-quote-left" style="position: absolute; top: 3rem; left: 3rem; font-size: 3rem; color: rgba(212, 175, 55, 0.1);"></i>
+            <h2 style="font-size: 2.2rem; line-height: 1.6; color: #fff; font-weight: 600; font-style: italic;">
+                "To redefine automotive care in Kochi by provide personalized, high-precision services that exceed the expectations of the most discerning owners."
+            </h2>
+            <div style="margin-top: 3rem;">
+                <span style="color: var(--primary); font-weight: 800; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem;">Lead Visionary</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

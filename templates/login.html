@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: url('{% static 'images/hero.png' %}') center/cover; position: relative; padding: 0;">
+    <div style="position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(5,5,5,0.7), rgba(5,5,5,1)); z-index: 1;"></div>
+    
+    <div class="glass-card reveal animate-zoom" style="max-width: 500px; width: 90%; position: relative; z-index: 2; padding: 4rem;">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <span class="hero-badge" style="margin-bottom: 1.5rem;">Access Hub</span>
+            <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #fff;">Welcome <span>Back</span></h2>
+            <p style="color: var(--text-muted); font-size: 1rem;">Enter your credentials for elite car care.</p>
+        </div>
+        
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom: 2.5rem;">
+                <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1rem;">User Identity</label>
+                <div style="position: relative;">
+                    <i class="fas fa-user-circle" style="position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem;"></i>
+                    <input type="text" name="username" style="width: 100%; padding: 1.2rem 1.2rem 1.2rem 4rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; outline: none; transition: var(--transition-smooth);" placeholder="Username" required onfocus="this.style.borderColor='var(--primary)'; this.style.background='rgba(255,255,255,0.05)'" onblur="this.style.borderColor='var(--border-glass)'; this.style.background='rgba(255,255,255,0.03)'">
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 3.5rem;">
+                <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1rem;">Security Key</label>
+                <div style="position: relative;">
+                    <i class="fas fa-key" style="position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem;"></i>
+                    <input type="password" name="password" style="width: 100%; padding: 1.2rem 1.2rem 1.2rem 4rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; outline: none; transition: var(--transition-smooth);" placeholder="••••••••" required onfocus="this.style.borderColor='var(--primary)'; this.style.background='rgba(255,255,255,0.05)'" onblur="this.style.borderColor='var(--border-glass)'; this.style.background='rgba(255,255,255,0.03)'">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.3rem; font-size: 1.1rem; justify-content: center; border-radius: 15px;">
+                AUTHORIZE ACCESS <i class="fas fa-shield-alt" style="margin-left: 12px;"></i>
+            </button>
+        </form>
+        
+        <div style="margin-top: 3rem; text-align: center; color: var(--text-muted); font-size: 0.95rem;">
+            New to the Experience? <a href="{% url 'register' %}" style="color: var(--primary); font-weight: 700; text-decoration: none; border-bottom: 1px solid var(--primary);">Apply for Account</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

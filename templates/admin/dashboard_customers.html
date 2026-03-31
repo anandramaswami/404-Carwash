@@ -1,0 +1,94 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block admin_content %}
+<div class="reveal animate-up">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5rem; gap: 2rem; flex-wrap: wrap;">
+        <div>
+            <h1 style="color: #fff; margin-bottom: 0.8rem; font-size: 3rem; font-weight: 800; letter-spacing: -1.5px;">Member <span>Portfolio</span></h1>
+            <p style="color: var(--text-muted); font-size: 1.15rem; max-width: 600px;">Full record of all registered 404 Car Care clients.</p>
+        </div>
+        
+        <form method="GET" style="display: flex; gap: 1rem; width: 100%; max-width: 450px;">
+            <div style="position: relative; flex-grow: 1;">
+                <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem;"></i>
+                <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Search by name or email..." 
+                       style="width: 100%; padding: 1rem 1rem 1rem 3rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; outline: none; transition: var(--transition-smooth);"
+                       onfocus="this.style.borderColor='var(--primary)'; this.style.background='rgba(255,255,255,0.05)'"
+                       onblur="this.style.borderColor='var(--border-glass)'; this.style.background='rgba(255,255,255,0.03)'">
+            </div>
+            <button type="submit" class="btn btn-primary" style="padding: 0 2rem; border-radius: 12px; height: 52px; font-weight: 700; font-size: 0.85rem; background: var(--primary); border: none; cursor: pointer;">
+                IDENTIFY
+            </button>
+            {% if query %}
+                <a href="{% url 'dashboard_customers' %}" style="background: rgba(255,255,255,0.05); color: #fff; padding: 0 1.5rem; border-radius: 12px; display: flex; align-items: center; border: 1px solid var(--border-glass); text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+                    RESET
+                </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="dashboard-card" style="padding: 0; overflow: hidden; border-radius: 30px;">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 900px;">
+                <thead style="background: rgba(212, 175, 55, 0.05); border-bottom: 1px solid var(--border-glass);">
+                    <tr>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Member</th>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Contact Details</th>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Address</th>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Induction Date</th>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; text-align: right;">Actions Control</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr style="border-bottom: 1px solid var(--border-glass); transition: background 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.01)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 2.5rem 2rem;">
+                            <div>
+                                <div style="color: #fff; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.2rem;">{{ customer.customer_name }}</div>
+                                <div style="color: var(--primary); font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; opacity: 0.9;">#{{ customer.customer_id }}</div>
+                            </div>
+                        </td>
+                        <td style="padding: 2.5rem 2rem;">
+                            <div style="color: #fff; font-weight: 500; font-size: 0.95rem; margin-bottom: 0.4rem;">{{ customer.email }}</div>
+                            <div style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-phone-alt" style="font-size: 0.7rem; color: var(--primary);"></i>
+                                {{ customer.contact|default:"+91 ---" }}
+                            </div>
+                        </td>
+                        <td style="padding: 2.5rem 2rem;">
+                            <div style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; max-width: 250px;">
+                                {{ customer.address|default:"Address not provided" }}
+                            </div>
+                        </td>
+                        <td style="padding: 2.5rem 2rem;">
+                            <div style="color: #fff; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem;">{{ customer.created_at|date:"M d, Y" }}</div>
+                            <span class="action-chip chip-primary" style="font-size: 0.65rem; padding: 4px 10px;">Platinum Tier</span>
+                        </td>
+                        <td style="padding: 2.5rem 2rem; text-align: right;">
+                            <form method="POST" style="display: inline;" onsubmit="return confirm('Immediately terminate this member account and all associated registries?');">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="customer_id" value="{{ customer.id }}">
+                                <button type="submit" class="btn btn-danger" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.6rem 1.5rem; border-radius: 10px; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'; this.style.transform='translateY(0)'">
+                                    TERMINATE
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="padding: 10rem 0; text-align: center;">
+                            <div style="width: 100px; height: 100px; background: rgba(212, 175, 55, 0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 3rem; border: 1px solid var(--border-glass);">
+                                <i class="fas fa-users-slash" style="font-size: 3rem; color: var(--primary); opacity: 0.3;"></i>
+                            </div>
+                            <h3 style="color: #fff; font-size: 1.8rem; margin-bottom: 1rem;">No Members Identified</h3>
+                            <p style="color: var(--text-muted); font-size: 1rem;">Registry search returned zero active members.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

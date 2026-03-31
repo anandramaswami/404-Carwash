@@ -1,0 +1,106 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block admin_content %}
+<div class="reveal animate-up">
+    <div style="margin-bottom: 5rem;">
+        <h1 style="color: #fff; margin-bottom: 0.8rem; font-size: 3rem; font-weight: 800; letter-spacing: -1.5px;">Active <span>Bookings</span></h1>
+        <p style="color: var(--text-muted); font-size: 1.15rem; max-width: 600px;">Chronological log of all appointments and service transactions.</p>
+    </div>
+
+    <div class="dashboard-card" style="padding: 0; overflow: hidden; border-radius: 30px;">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead style="background: rgba(212, 175, 55, 0.05); border-bottom: 1px solid var(--border-glass);">
+                    <tr>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Client Details</th>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Schedule Timeline</th>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Service Spec</th>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Bay/Vehicle</th>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Payment State</th>
+                        <th style="padding: 2rem; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800;">Lifecycle Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr style="border-bottom: 1px solid var(--border-glass); transition: background 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.01)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 2.5rem 2rem;">
+                            <div style="color: #fff; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.3rem;">{{ booking.customer.customer_name }}</div>
+                            <div style="color: var(--primary); font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; opacity: 0.9;">#{{ booking.customer.customer_id }}</div>
+                        </td>
+                        <td style="padding: 2.5rem 2rem;">
+                            <div style="margin-bottom: 1rem;">
+                                <span style="color: var(--primary); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.3rem;">Service Date</span>
+                                <div style="color: #fff; font-weight: 700; font-size: 1.1rem;">{{ booking.service_date|date:"D, M d" }}</div>
+                            </div>
+                            <div style="opacity: 0.8;">
+                                <span style="color: rgba(255,255,255,0.4); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Booked On</span>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">{{ booking.booking_date|date:"M d, Y" }}</div>
+                            </div>
+                        </td>
+                        <td style="padding: 2.5rem 2rem;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.05); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                                    <i class="fas fa-microchip" style="font-size: 0.9rem;"></i>
+                                </div>
+                                <div style="color: #fff; font-weight: 600;">{{ booking.service.service_name }}</div>
+                            </div>
+                        </td>
+                        <td style="padding: 2.5rem 2rem;">
+                            <div style="margin-bottom: 0.5rem;">
+                                {% if booking.parking %}
+                                    <span class="action-chip chip-primary" style="font-size: 0.65rem;">BAY {{ booking.parking.slot_number }}</span>
+                                {% else %}
+                                    <span style="color: var(--text-muted); font-style: italic; font-size: 0.8rem;">STANDBY</span>
+                                {% endif %}
+                            </div>
+                            <div style="color: #fff; font-weight: 600; font-size: 0.85rem;">{{ booking.car_brand }} {{ booking.car_model }}</div>
+                            <div style="color: var(--primary); font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; margin-top: 5px;">{{ booking.car_reg_num|upper }}</div>
+                        </td>
+                        <td style="padding: 2.5rem 2rem;">
+                            <div style="display: flex; align-items: center; gap: 8px; color: {% if booking.payment_status == 'Paid' %}#22c55e{% else %}var(--primary){% endif %}; font-weight: 800; font-size: 0.8rem; letter-spacing: 1px;">
+                                <i class="fas {% if booking.payment_status == 'Paid' %}fa-check-circle{% else %}fa-clock{% endif %}"></i>
+                                {{ booking.payment_status|upper }}
+                            </div>
+                            {% if booking.payment_id %}
+                                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 5px;">TXN: {{ booking.payment_id|truncatechars:10|upper }}</div>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 2.5rem 2rem;">
+                            {% if booking.booking_status == 'Pending' %}
+                                <span style="background: rgba(212, 175, 55, 0.1); color: var(--primary); padding: 8px 16px; border-radius: 80px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; border: 1px solid rgba(212, 175, 55, 0.2);">AWAITING SETTLEMENT</span>
+                            {% elif booking.booking_status == 'Completed' or booking.booking_status == 'Cancelled' %}
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="background: rgba(255,255,255,0.05); color: #fff; padding: 8px 16px; border-radius: 80px; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;">{{ booking.booking_status|upper }}</span>
+                                    <i class="fas fa-lock" style="color: var(--text-muted); font-size: 0.7rem;"></i>
+                                </div>
+                            {% else %}
+                                <form method="POST" style="display: flex; gap: 10px; align-items: center;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="update_status">
+                                    <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                                    <select name="status" style="padding: 8px 15px; font-size: 0.8rem; background: #000; border: 1px solid var(--primary); border-radius: 8px; color: var(--primary); outline: none; font-weight: 600; cursor: pointer;">
+                                        <option value="Booked" style="background: #000; color: #fff;" {% if booking.booking_status == 'Booked' %}selected{% endif %}>Booked</option>
+                                        <option value="Completed" style="background: #000; color: #fff;" {% if booking.booking_status == 'Completed' %}selected{% endif %}>Completed</option>
+                                        <option value="Cancelled" style="background: #000; color: #fff;" {% if booking.booking_status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary" style="padding: 0.6rem 1rem; font-size: 0.75rem; border-radius: 8px; min-width: auto;">
+                                        COMMIT
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="padding: 10rem 0; text-align: center;">
+                            <div style="opacity: 0.2; transform: scale(3); margin-bottom: 3rem; color: var(--primary);"><i class="fas fa-folder-open"></i></div>
+                            <div style="color: var(--text-muted); font-family: 'Outfit'; font-size: 1.2rem;">Registry is currently void of records.</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

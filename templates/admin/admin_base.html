@@ -1,0 +1,288 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Control - 404 Car Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        :root {
+            --primary: #d4af37;
+            --primary-hover: #b08d29;
+            --primary-glow: rgba(212, 175, 55, 0.4);
+            --bg-obsidian: #050505;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-muted: #a0a0a0;
+        }
+
+        body {
+            background: var(--bg-obsidian) !important;
+            color: #fff !important;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .brand-text {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 320px;
+            background: #080808;
+            border-right: 1px solid var(--border-glass);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 3rem 2.5rem;
+            border-bottom: 1px solid var(--border-glass);
+            margin-bottom: 2rem;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .brand-logo-admin {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), #b08d29);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.4rem;
+            font-weight: 800;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .sidebar-menu {
+            padding: 0 1.5rem;
+            flex-grow: 1;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1.2rem 2rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .sidebar-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            color: var(--primary);
+            background: rgba(212, 175, 55, 0.05);
+            transform: translateX(5px);
+        }
+
+        .sidebar-link.active {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .sidebar-footer {
+            padding: 2rem;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        /* Main Content Styling */
+        .admin-main {
+            margin-left: 320px;
+            flex-grow: 1;
+            padding: 4rem 6rem;
+            min-width: 0; /* Prevents flex children from overflowing */
+        }
+
+        .admin-top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5rem;
+            gap: 2rem;
+        }
+
+        .dashboard-card {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            width: 100%;
+        }
+
+        .dashboard-card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .action-chip {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chip-primary { background: rgba(212, 175, 55, 0.1); color: var(--primary); border: 1px solid rgba(212, 175, 55, 0.2); }
+
+        /* Responsive Design Enhancement */
+        @media (max-width: 1600px) {
+            .admin-main { padding: 4rem 4rem; }
+        }
+
+        @media (max-width: 1400px) {
+            .sidebar { width: 280px; }
+            .admin-main { margin-left: 280px; padding: 3rem; }
+            .admin-top-nav { margin-bottom: 3rem; }
+        }
+
+        @media (max-width: 1100px) {
+            .sidebar { width: 80px; }
+            .sidebar .brand-text, .sidebar .sidebar-link span, .sidebar .sidebar-header div:last-child { display: none; }
+            .sidebar-link { padding: 1.2rem; justify-content: center; }
+            .sidebar-link i { font-size: 1.4rem; }
+            .admin-main { margin-left: 80px; padding: 2rem; }
+            .sidebar-header { padding: 2rem 1rem; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .admin-main { margin-left: 0; padding: 1.5rem; }
+            .admin-top-nav { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+            .dashboard-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Vertical Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="{% url 'admin_dashboard' %}" class="admin-brand">
+                    <div class="brand-logo-admin">404</div>
+                    <div style="font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px; color: #fff;">CAR CARE</div>
+                </a>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="{% url 'admin_dashboard' %}" class="sidebar-link">
+                    <i class="fas fa-chart-line"></i> Analytics Overview
+                </a>
+                <a href="{% url 'dashboard_customers' %}" class="sidebar-link">
+                    <i class="fas fa-users-viewfinder"></i> Member Portfolio
+                </a>
+                <a href="{% url 'dashboard_services' %}" class="sidebar-link">
+                    <i class="fas fa-gem"></i> Available Services
+                </a>
+                <a href="{% url 'dashboard_parkings' %}" class="sidebar-link">
+                    <i class="fas fa-map-location-dot"></i> Elite Service Bays
+                </a>
+                <a href="{% url 'dashboard_bookings' %}" class="sidebar-link">
+                    <i class="fas fa-calendar-check"></i> Active Bookings
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="{% url 'home' %}" class="sidebar-link" style="margin-bottom: 0;">
+                    <i class="fas fa-external-link-alt"></i> Public Interface
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="admin-main">
+            <header class="admin-top-nav">
+                <div>
+                    <h2 style="font-size: 2rem; margin-bottom: 0.5rem; letter-spacing: -1px;">404 <span>Car Care</span></h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Authenticated managing session active.</p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <div style="text-align: right;">
+                        <div style="color: #fff; font-weight: 700; font-size: 0.95rem;">System Manager</div>
+                        <div style="color: var(--primary); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Root Access</div>
+                    </div>
+                    <a href="{% url 'logout' %}" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.8rem; border-radius: 10px;">
+                        END SESSION <i class="fas fa-power-off" style="margin-left: 10px;"></i>
+                    </a>
+                </div>
+            </header>
+
+            {% if messages %}
+            <div style="margin-bottom: 3rem;">
+                {% for message in messages %}
+                <div style="padding: 1.5rem 2rem; border-radius: 15px; margin-bottom: 1rem; border: 1px solid var(--border-glass); 
+                    {% if message.tags == 'success' %}background: rgba(34, 197, 94, 0.1); color: #22c55e; border-color: rgba(34, 197, 94, 0.2);
+                    {% else %}background: rgba(239, 68, 68, 0.1); color: #ef4444; border-color: rgba(239, 68, 68, 0.2);{% endif %}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}" style="margin-right: 12px;"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="reveal animate-up">
+                {% block admin_content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <!-- Scroll Reveal Logic -->
+    <script>
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        
+        // Active Link Highlighting
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

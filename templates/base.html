@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Car Care | Obsidian & Gold Elite Detailing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v={% now 'U' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="nav-brand">
+            <span class="brand-num" style="color: var(--primary); font-family: 'Outfit'; font-weight: 800; font-size: 2.2rem; filter: drop-shadow(0 0 8px var(--primary-glow));">404</span>
+            <span class="brand-text" style="color: #fff; font-size: 0.9rem; letter-spacing: 4px; font-weight: 700;">CAR CARE</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}" class="nav-link">Home</a>
+            <a href="{% url 'about' %}" class="nav-link">About</a>
+            <a href="{% url 'services' %}" class="nav-link">Services</a>
+            {% if user.is_authenticated %}
+                {% if user.is_customer %}
+                    <a href="{% url 'my_bookings' %}" class="nav-link">Reservations</a>
+                {% endif %}
+                {% if user.is_admin %}
+                    <a href="{% url 'admin_dashboard' %}" class="nav-link" style="color: var(--primary); font-weight: 600;">Control Center</a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="user-actions" style="display: flex; align-items: center; gap: 2rem;">
+            {% if user.is_authenticated %}
+                <div class="user-profile-menu" id="profileMenu">
+                    <div class="profile-logo" id="profileTrigger" style="cursor: pointer; border: 2px solid var(--primary);">
+                        {{ user.username|first|upper }}
+                    </div>
+                    <div class="profile-dropdown" id="profileDropdown" style="background: rgba(5,5,5,0.95); border: 1px solid var(--border-glass);">
+                        <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-glass); margin-bottom: 0.5rem;">
+                            <p style="color: #fff; font-weight: 700; margin-bottom: 0.2rem; font-size: 1.1rem;">{{ user.username }}</p>
+                            <span style="color: var(--primary); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px;">
+                                {% if user.is_admin %}Administrator{% else %}Platinum Tier{% endif %}
+                            </span>
+                        </div>
+                        <a href="{% url 'profile' %}" class="dropdown-item">
+                            <i class="fas fa-id-badge" style="color: var(--primary);"></i>
+                            Membership Profile
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'logout' %}" class="dropdown-item logout-item">
+                            <i class="fas fa-power-off"></i>
+                            End Session
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-link" style="margin-right: 1.5rem;">Sign In</a>
+                <a href="{% url 'register' %}" class="btn-primary" style="padding: 0.8rem 2rem; border-radius: 50px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Join Elite</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} animate-up">
+            <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}" style="margin-right: 10px; color: {% if message.tags == 'success' %}var(--success){% else %}var(--danger){% endif %};"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer style="background: var(--bg-dark); padding: 5rem 10% 3rem; border-top: 1px solid var(--border-glass);">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 3rem;">
+            <div>
+                <a href="{% url 'home' %}" class="nav-brand" style="margin-bottom: 1.5rem; display: block;">
+                    <span class="brand-num" style="color: var(--primary); font-family: 'Outfit'; font-weight: 800; font-size: 2rem;">404</span>
+                    <span class="brand-text" style="color: #fff; font-size: 0.85rem; letter-spacing: 4px; font-weight: 700;">CAR CARE</span>
+                </a>
+                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-width: 400px;">
+                    Setting the global standard for automotive detailing and surface preservation in Kochi. Exclusive care for extraordinary vehicles.
+                </p>
+            </div>
+            <div>
+                <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 1.8rem; text-transform: uppercase; letter-spacing: 2px;">The Experience</h4>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.8rem;">
+                    <li><a href="{% url 'home' %}" style="color: var(--text-muted); transition: var(--transition-smooth); font-size: 0.9rem;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">Curated Home</a></li>
+                    <li><a href="{% url 'about' %}" style="color: var(--text-muted); transition: var(--transition-smooth); font-size: 0.9rem;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">Our Legacy</a></li>
+                    <li><a href="{% url 'services' %}" style="color: var(--text-muted); transition: var(--transition-smooth); font-size: 0.9rem;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">Elite Services</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 1.8rem; text-transform: uppercase; letter-spacing: 2px;">Contact Us</h4>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.8rem;">
+                    <li style="color: var(--text-muted); display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Kochi, Kerala</li>
+                    <li style="color: var(--text-muted); display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i class="fas fa-phone-alt" style="color: var(--primary);"></i> +91 98765 43210</li>
+                    <li style="color: var(--text-muted); display: flex; align-items: center; gap: 10px; font-size: 0.9rem;"><i class="fas fa-paper-plane" style="color: var(--primary);"></i> care@404car.com</li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #fff; font-size: 1.1rem; margin-bottom: 1.8rem; text-transform: uppercase; letter-spacing: 2px;">Newsletter</h4>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Join the circle for rare updates.</p>
+                <div style="position: relative;">
+                    <input type="email" placeholder="Email Address" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; outline: none; font-size: 0.9rem;">
+                    <button style="position: absolute; right: 4px; top: 4px; bottom: 4px; background: var(--primary); border: none; padding: 0 1.2rem; border-radius: 6px; cursor: pointer; color: #000; font-weight: 700;"><i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 3rem; margin-bottom: 2.5rem;">
+            <a href="#" style="color: var(--text-muted); font-size: 1.6rem; transition: var(--transition-smooth);" title="Facebook" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" style="color: var(--text-muted); font-size: 1.6rem; transition: var(--transition-smooth);" title="Instagram" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" style="color: var(--text-muted); font-size: 1.6rem; transition: var(--transition-smooth);" title="YouTube" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-glass); padding-top: 2rem; text-align: center;">
+            <div style="display: flex; justify-content: center; gap: 2.5rem; margin-bottom: 1.5rem;">
+                <a href="#" style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition-smooth);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">Privacy Policy</a>
+                <a href="#" style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition-smooth);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">Terms of Service</a>
+            </div>
+            
+            <p style="color: var(--text-muted); font-size: 0.85rem; letter-spacing: 0.5px;">&copy; 2026 404 Car Care. Handcrafted for Elite Performance.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Reveal Enhancement
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Navbar Compact Effect
+        window.addEventListener("scroll", function() {
+            const nav = document.querySelector(".navbar");
+            if (window.scrollY > 80) {
+                nav.style.padding = "0.8rem 6%";
+                nav.style.background = "rgba(5, 5, 5, 0.98)";
+                nav.style.boxShadow = "0 10px 30px rgba(0,0,0,0.5)";
+            } else {
+                nav.style.padding = "1.5rem 6%";
+                nav.style.background = "var(--bg-glass)";
+                nav.style.boxShadow = "none";
+            }
+        });
+
+        // Toggle Profile
+        const profileTrigger = document.getElementById('profileTrigger');
+        const profileDropdown = document.getElementById('profileDropdown');
+        if (profileTrigger) {
+            profileTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('active');
+            });
+            document.addEventListener('click', () => {
+                profileDropdown.classList.remove('active');
+            });
+        }
+    </script>
+</body>
+</html>

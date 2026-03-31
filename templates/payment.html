@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section" style="padding-top: 10rem; padding-bottom: 10rem;">
+    <div class="container" style="max-width: 800px;">
+        <!-- Header -->
+        <div class="reveal animate-up" style="margin-bottom: 5rem; text-align: center;">
+            <span class="hero-badge" style="margin-bottom: 2rem;">Secure Checkout</span>
+            <h1 style="font-size: 3.8rem; color: #fff; margin-bottom: 1rem; letter-spacing: -2px; font-weight: 800;">Elite <span>Settlement</span></h1>
+            <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 500px; margin: 0 auto;">Finalize your reservation with our encrypted high-speed gateway.</p>
+        </div>
+
+        <div class="glass-card reveal animate-zoom" style="padding: 0; overflow: hidden; border-radius: 40px;">
+            <!-- Order Summary Section -->
+            <div style="background: rgba(255,255,255,0.02); padding: 4rem; border-bottom: 1px solid var(--border-glass);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem;">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: #fff; margin-bottom: 0.5rem; letter-spacing: -1px;">{{ booking.service.service_name }}</h2>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-calendar-alt" style="color: var(--primary);"></i> Scheduled for {{ booking.service_date|date:"l, F j, Y" }}
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="color: var(--primary); font-size: 2.8rem; font-weight: 800; letter-spacing: -2px;">₹{{ booking.service.price }}</div>
+                        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;">Final Amount</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; background: rgba(0,0,0,0.2); padding: 2rem; border-radius: 20px; border: 1px solid var(--border-glass);">
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 0.5rem;">Vehicle Profile</span>
+                        <div style="color: #fff; font-weight: 600; margin-bottom: 0.3rem;">{{ booking.car_brand }} {{ booking.car_model }}</div>
+                        <div style="color: var(--primary); font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">[{{ booking.car_reg_num }}]</div>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 0.5rem;">Ref Number</span>
+                        <div style="color: #fff; font-weight: 600;">#{{ booking.id|stringformat:"04d" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div style="padding: 4rem;">
+                <h3 style="color: #fff; font-size: 1.3rem; margin-bottom: 2.5rem; text-align: center; letter-spacing: 1px; text-transform: uppercase; font-weight: 800;">Gateway Confirmation</h3>
+                
+                <form id="submission-form" method="POST" style="text-align: center;">
+                    {% csrf_token %}
+                    <input type="hidden" name="payment_method" value="standard">
+                    
+                    <button type="submit" class="btn btn-primary" style="padding: 1.5rem 4rem; font-size: 1.1rem; border-radius: 15px; width: 100%; max-width: 400px; display: inline-flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; transition: all 0.3s ease;">
+                        CONFIRM BOOKING <i class="fas fa-check-circle"></i>
+                    </button>
+                    
+                    <p style="text-align: center; font-size: 0.75rem; color: #5f6368; margin-top: 20px;">
+                        By clicking confirm, you agree to our Terms of Service & secure handling.
+                    </p>
+                </form>
+
+                <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 3rem;">
+                    <div style="display: flex; gap: 5px;">
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-cc-apple-pay"></i>
+                    </div>
+                    <div style="width: 1px; height: 15px; background: var(--border-glass);"></div>
+                    <span>ISO 27001 Certified Gateway</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

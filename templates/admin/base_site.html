@@ -1,0 +1,77 @@
+{% extends "admin/base.html" %}
+
+{% block extrastyle %}
+<style>
+    /* Dark Blue Overhaul for Django Admin */
+    :root {
+        --primary: #1D4ED8;
+        --primary-bg: #020617;
+        --sidebar-bg: #0F172A;
+        --glass-border: #1E3A8A;
+    }
+
+    body, #container, #content, .module, #header {
+        background: var(--primary-bg) !important;
+        color: #F8FAFC !important;
+    }
+
+    #header {
+        background: var(--sidebar-bg) !important;
+        border-bottom: 2px solid var(--glass-border) !important;
+    }
+
+    #branding h1 {
+        color: var(--primary) !important;
+    }
+
+    .module h2, .module caption, .inline-group h2 {
+        background: var(--primary) !important;
+        color: #fff !important;
+    }
+
+    div.breadcrumbs {
+        background: var(--sidebar-bg) !important;
+        color: #94A3B8 !important;
+    }
+
+    a:link, a:visited {
+        color: var(--primary) !important;
+    }
+
+    /* Login Page Specific */
+    .login body {
+        background: radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.4) 0px, transparent 50%), #020617 !important;
+    }
+
+    .login #container {
+        background: rgba(15, 23, 42, 0.9) !important;
+        border: 2px solid var(--glass-border) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .login .form-row input {
+        background: rgba(2, 6, 23, 0.8) !important;
+        color: #fff !important;
+        border: 1px solid var(--glass-border) !important;
+    }
+
+    .submit-row input {
+        background: var(--primary) !important;
+        border-radius: 8px !important;
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <svg width="32" height="32" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 12px;">
+        <path d="M45.5 20.5C45.5 19.9 45.1 19.5 44.5 19.5H39.8L36.2 13.5C35.8 12.9 35.2 12.5 34.5 12.5H15.5C14.8 12.5 14.2 12.9 13.8 13.5L10.2 19.5H5.5C4.9 19.5 4.5 19.9 4.5 20.5V22.5C4.5 23.1 4.9 23.5 5.5 23.5H6.5L8.5 28.5H41.5L43.5 23.5H44.5C45.1 23.5 45.5 23.1 45.5 22.5V20.5Z" fill="var(--primary)"/>
+        <path d="M16.5 14.5H33.5L36 19.5H14L16.5 14.5Z" fill="#fff" fill-opacity="0.7"/>
+        <path d="M4.5 28.5C4.5 27.9 4.9 27.5 5.5 27.5H8.5L10.5 32.5H39.5L41.5 27.5H44.5C45.1 27.5 45.5 27.9 45.5 28.5V30.5C45.5 31.1 45.1 31.5 44.5 31.5H5.5C4.9 31.5 4.5 31.1 4.5 30.5V28.5Z" fill="var(--primary)"/>
+        <circle cx="12" cy="35" r="4" fill="#fff"/>
+        <circle cx="38" cy="35" r="4" fill="#fff"/>
+    </svg>
+    404 CarWash Admin
+</h1>
+{% endblock %}

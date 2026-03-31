@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section" style="min-height: 120vh; display: flex; align-items: center; justify-content: center; background: url('{% static 'images/hero.png' %}') center/cover; position: relative; padding: 10rem 0;">
+    <div style="position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(5,5,5,0.7), rgba(5,5,5,1)); z-index: 1;"></div>
+    
+    <div class="glass-card reveal animate-zoom" style="max-width: 800px; width: 90%; position: relative; z-index: 2; padding: 6rem;">
+        <div style="text-align: center; margin-bottom: 5rem;">
+            <span class="hero-badge" style="margin-bottom: 1.5rem;">Join the Circle</span>
+            <h2 style="font-size: 3rem; margin-bottom: 0.5rem; color: #fff;">Create <span>Account</span></h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Begin your journey of automotive excellence with us.</p>
+        </div>
+        
+        <form method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem;">
+                <div class="form-group">
+                    <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1rem;">Member Name</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-id-card" style="position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem;"></i>
+                        <input type="text" name="username" style="width: 100%; padding: 1.2rem 1.2rem 1.2rem 4rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; outline: none; transition: var(--transition-smooth); text-transform: uppercase;" placeholder="ANAND" pattern="[A-Z0-9\s]+" title="Username must be in FULL UPPER CASE" required onfocus="this.style.borderColor='var(--primary)'; this.style.background='rgba(255,255,255,0.05)'" onblur="this.style.borderColor='var(--border-glass)'; this.style.background='rgba(255,255,255,0.03)'">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1rem;">Email Address</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-envelope" style="position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem;"></i>
+                        <input type="email" name="email" style="width: 100%; padding: 1.2rem 1.2rem 1.2rem 4rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; outline: none; transition: var(--transition-smooth);" placeholder="john@example.com" required onfocus="this.style.borderColor='var(--primary)'; this.style.background='rgba(255,255,255,0.05)'" onblur="this.style.borderColor='var(--border-glass)'; this.style.background='rgba(255,255,255,0.03)'">
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem;">
+                <div class="form-group">
+                    <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1rem;">Security Key</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-key" style="position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem;"></i>
+                        <input type="password" name="password" style="width: 100%; padding: 1.2rem 1.2rem 1.2rem 4rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; outline: none; transition: var(--transition-smooth);" placeholder="••••••••" required onfocus="this.style.borderColor='var(--primary)'; this.style.background='rgba(255,255,255,0.05)'" onblur="this.style.borderColor='var(--border-glass)'; this.style.background='rgba(255,255,255,0.03)'">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1rem;">Phone Contact</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-phone-alt" style="position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem;"></i>
+                        <input type="text" name="contact" style="width: 100%; padding: 1.2rem 1.2rem 1.2rem 4rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; outline: none; transition: var(--transition-smooth);" placeholder="9876543210" maxlength="10" required onfocus="this.style.borderColor='var(--primary)'; this.style.background='rgba(255,255,255,0.05)'" onblur="this.style.borderColor='var(--border-glass)'; this.style.background='rgba(255,255,255,0.03)'">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 4rem;">
+                <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1rem;">Primary Address</label>
+                <div style="position: relative;">
+                    <i class="fas fa-map-marker-alt" style="position: absolute; left: 1.5rem; top: 1.5rem; color: var(--primary); font-size: 1.2rem;"></i>
+                    <textarea name="address" style="width: 100%; padding: 1.2rem 1.2rem 1.2rem 4rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; outline: none; transition: var(--transition-smooth); min-height: 120px; resize: none;" placeholder="Full Address Details..." required onfocus="this.style.borderColor='var(--primary)'; this.style.background='rgba(255,255,255,0.05)'" onblur="this.style.borderColor='var(--border-glass)'; this.style.background='rgba(255,255,255,0.03)'"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.4rem; font-size: 1.2rem; justify-content: center; border-radius: 18px;">
+                REGISTER ELITE MEMBERSHIP <i class="fas fa-crown" style="margin-left: 12px;"></i>
+            </button>
+        </form>
+        
+        <div style="margin-top: 4rem; text-align: center; color: var(--text-muted); font-size: 1rem;">
+            Already a member? <a href="{% url 'login' %}" style="color: var(--primary); font-weight: 700; text-decoration: none; border-bottom: 1px solid var(--primary);">Secure Login</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
