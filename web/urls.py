@@ -12,6 +12,7 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('book/<int:service_id>/', views.book_service, name='book_service'),
     path('payment/', views.process_payment, name='process_payment'),
+    path('get-available-bays/', views.get_available_bays, name='get_available_bays'),
     
     # Admin routes
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),

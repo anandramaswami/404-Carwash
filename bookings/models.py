@@ -11,6 +11,7 @@ class Booking_History(models.Model):
     service = models.ForeignKey(Services, on_delete=models.CASCADE, related_name='service')
     booking_date = models.DateTimeField(auto_now_add=True)
     service_date = models.DateField()
+    service_time = models.CharField(max_length=20, default='10:00 AM')
     car_brand = models.CharField(max_length=50, default=True)
     car_model = models.CharField(max_length=50, default=True)
     car_color = models.CharField(max_length=30, default=True)
@@ -19,11 +20,3 @@ class Booking_History(models.Model):
     payment_status = models.CharField(max_length=30, choices=[('Unpaid', 'Unpaid'), ('Paid', 'Paid')], default='Unpaid')
     payment_id = models.CharField(max_length=100, blank=True, null=True)
 
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
-
-@receiver(post_delete, sender=Booking_History)
-def release_parking_slot(sender, instance, **kwargs):
-    if instance.parking:
-        instance.parking.is_available = True
-        instance.parking.save()

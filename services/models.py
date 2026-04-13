@@ -7,7 +7,7 @@ class Services(models.Model):
     service_name = models.CharField(max_length=50, unique=True)
     description = models.TextField(max_length=300)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration_minutes = models.CharField(max_length=10, default=True)
+    duration_minutes = models.IntegerField(default=120)
     image_url = models.URLField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

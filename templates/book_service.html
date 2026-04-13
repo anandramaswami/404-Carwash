@@ -22,35 +22,17 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 3.5rem;">
                     <div class="form-group" style="position: relative; z-index: 50;">
                         <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1.2rem;">Car Brand</label>
-                        <div class="custom-select-wrapper" style="position: relative;">
-                            <div class="custom-select-trigger booking-input" onclick="toggleBrandOptions()" id="brand-trigger" style="cursor: pointer; display: flex !important; align-items: center; justify-content: space-between;">
-                                <div style="display: flex; align-items: center; gap: 1.2rem;">
-                                    <i class="fas fa-car" style="color: var(--primary); font-size: 1.2rem;"></i>
-                                    <span id="selected-brand-text">Select Brand</span>
-                                </div>
-                                <i class="fas fa-chevron-down" style="color: var(--text-muted); font-size: 0.8rem;"></i>
-                            </div>
-                            <div id="brand-options" class="custom-options" style="display: none; position: absolute; top: calc(100% + 5px); left: 0; right: 0; background: #000; border: 1px solid var(--primary); border-radius: 12px; z-index: 1000; overflow-y: auto; max-height: 250px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
-                                <!-- Populated dynamically by JS -->
-                            </div>
-                            <input type="hidden" name="car_brand" id="car_brand" required>
+                        <div style="position: relative;">
+                            <i class="fas fa-car" style="position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem; z-index: 5;"></i>
+                            <input type="text" name="car_brand" id="car_brand" class="booking-input" placeholder="e.g. Porsche" autocomplete="off" oninput="toTitleCase(this)" required>
                         </div>
                     </div>
                     
                     <div class="form-group" style="position: relative; z-index: 40;">
                         <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1.2rem;">Car Model</label>
-                        <div class="custom-select-wrapper" style="position: relative;">
-                            <div class="custom-select-trigger booking-input" onclick="toggleModelOptions()" id="model-trigger" style="cursor: pointer; display: flex !important; align-items: center; justify-content: space-between;">
-                                <div style="display: flex; align-items: center; gap: 1.2rem;">
-                                    <i class="fas fa-tag" style="color: var(--primary); font-size: 1.2rem;"></i>
-                                    <span id="selected-model-text">Select Brand First</span>
-                                </div>
-                                <i class="fas fa-chevron-down" style="color: var(--text-muted); font-size: 0.8rem;"></i>
-                            </div>
-                            <div id="model-options" class="custom-options" style="display: none; position: absolute; top: calc(100% + 5px); left: 0; right: 0; background: #000; border: 1px solid var(--primary); border-radius: 12px; z-index: 1000; overflow-y: auto; max-height: 250px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
-                                <!-- Populated dynamically by JS -->
-                            </div>
-                            <input type="hidden" name="car_model" id="car_model" required>
+                        <div style="position: relative;">
+                            <i class="fas fa-tag" style="position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.2rem; z-index: 5;"></i>
+                            <input type="text" name="car_model" id="car_model" class="booking-input" placeholder="e.g. 911 GT3" autocomplete="off" oninput="toTitleCase(this)" required>
                         </div>
                     </div>
                 </div>
@@ -73,7 +55,7 @@
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 5rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 3.5rem;">
                     <div class="form-group">
                         <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1.2rem;">Date of Booking</label>
                         <div style="position: relative;">
@@ -81,7 +63,30 @@
                             <input type="date" name="service_date" id="datePicker" class="booking-input" placeholder="Select a date..." required>
                         </div>
                     </div>
-                    
+
+                    <div class="form-group">
+                        <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1.2rem;">Time Slot</label>
+                        <div class="custom-select-wrapper" style="position: relative;">
+                            <div class="custom-select-trigger booking-input" onclick="toggleTimeSelect()" style="cursor: pointer; display: flex !important; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 1.2rem;">
+                                    <i class="fas fa-clock" style="color: var(--primary); font-size: 1.2rem;"></i>
+                                    <span id="selected-time-text">Select Time Slot</span>
+                                </div>
+                                <i class="fas fa-chevron-down" style="color: var(--text-muted); font-size: 0.8rem;"></i>
+                            </div>
+                            <div id="time-options" class="custom-options" style="display: none; position: absolute; top: calc(100% + 5px); left: 0; right: 0; background: #000; border: 1px solid var(--primary); border-radius: 12px; z-index: 1000; overflow-y: auto; max-height: 250px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
+                                <div class="custom-option" onclick="selectTime('09:00 AM')" style="padding: 1.2rem 1.5rem; color: #fff; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);">09:00 AM</div>
+                                <div class="custom-option" onclick="selectTime('11:00 AM')" style="padding: 1.2rem 1.5rem; color: #fff; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);">11:00 AM</div>
+                                <div class="custom-option" onclick="selectTime('01:00 PM')" style="padding: 1.2rem 1.5rem; color: #fff; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);">01:00 PM</div>
+                                <div class="custom-option" onclick="selectTime('03:00 PM')" style="padding: 1.2rem 1.5rem; color: #fff; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);">03:00 PM</div>
+                                <div class="custom-option" onclick="selectTime('05:00 PM')" style="padding: 1.2rem 1.5rem; color: #fff; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);">05:00 PM</div>
+                            </div>
+                            <input type="hidden" name="service_time" id="real-time-input" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; margin-bottom: 5rem;">
                     <div class="form-group">
                         <label style="display: block; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1.2rem;">Executive Detailing Bay</label>
                         <div class="custom-select-wrapper" style="position: relative;">
@@ -93,25 +98,13 @@
                                 <i class="fas fa-chevron-down" style="color: var(--text-muted); font-size: 0.8rem;"></i>
                             </div>
                             <div id="custom-options" class="custom-options" style="display: none; position: absolute; top: calc(100% + 5px); left: 0; right: 0; background: #000; border: 1px solid var(--primary); border-radius: 12px; z-index: 1000; overflow-y: auto; max-height: 250px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
-                                {% for slot in available_slots %}
-                                    <div class="custom-option" onclick="selectBay('{{ slot.id }}', 'ELITE BAY {{ slot.slot_number }}')" style="padding: 1.2rem 1.5rem; color: #fff; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                        ELITE BAY {{ slot.slot_number }}
-                                    </div>
-                                {% empty %}
-                                    <div style="padding: 1.2rem 1.5rem; color: var(--text-muted);">All Bays Occupied</div>
-                                {% endfor %}
+                                <div style="padding: 1.2rem 1.5rem; color: var(--text-muted); font-size: 0.9rem;">Please select date and time slot first to view available bays.</div>
                             </div>
                             <input type="hidden" name="parking_slot" id="real-bay-input" required>
                         </div>
                     </div>
                 </div>
 
-                {% if not available_slots %}
-                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 2rem; border-radius: 15px; margin-bottom: 4rem; display: flex; align-items: center; gap: 1.5rem; color: #fca5a5;">
-                        <i class="fas fa-user-shield" style="font-size: 1.5rem;"></i>
-                        <span style="font-size: 1rem; font-weight: 600;">The facility is currently at full capacity. Please contact our Support for assistance.</span>
-                    </div>
-                {% endif %}
                 
                 <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 1.5rem; font-size: 1.2rem; border-radius: 20px;">
                     CONFIRM APPOINTMENT & PROCEED (₹{{ service.price }}) <i class="fas fa-arrow-right" style="margin-left: 15px;"></i>
@@ -234,158 +227,115 @@
         altInputClass: "booking-input",
         altFormat: "F j, Y",
         disableMobile: "true",
-        monthSelectorType: "dropdown" // Dropdown enabled
+        monthSelectorType: "dropdown",
+        disable: [
+            function(date) {
+                // Return true to disable Sundays (0 is Sunday)
+                return (date.getDay() === 0);
+            }
+        ],
+        locale: {
+            "firstDayOfWeek": 1 // Start week on Monday
+        },
+        onChange: function(selectedDates, dateStr, instance) {
+            updateAvailableBays();
+        }
     });
 
     // Custom Select Logic for Bay
     function toggleCustomSelect() {
         const options = document.getElementById('custom-options');
         options.style.display = options.style.display === 'none' ? 'block' : 'none';
-        document.getElementById('brand-options').style.display = 'none';
-        document.getElementById('model-options').style.display = 'none';
+        document.getElementById('time-options').style.display = 'none';
     }
 
-    function toggleBrandOptions() {
-        const drop = document.getElementById('brand-options');
-        drop.style.display = drop.style.display === 'none' ? 'block' : 'none';
-        document.getElementById('model-options').style.display = 'none';
+    function toggleTimeSelect() {
+        const options = document.getElementById('time-options');
+        options.style.display = options.style.display === 'none' ? 'block' : 'none';
         document.getElementById('custom-options').style.display = 'none';
     }
 
-    function toggleModelOptions() {
-        if (!document.getElementById('car_brand').value) return; // Must select brand first
-        const drop = document.getElementById('model-options');
-        drop.style.display = drop.style.display === 'none' ? 'block' : 'none';
-        document.getElementById('brand-options').style.display = 'none';
-        document.getElementById('custom-options').style.display = 'none';
-    }
-
-    function selectBrand(brandName) {
-        document.getElementById('selected-brand-text').innerText = brandName;
-        document.getElementById('selected-brand-text').style.color = '#fff';
-        const brandInput = document.getElementById('car_brand');
-        brandInput.value = brandName;
-        document.getElementById('brand-options').style.display = 'none';
-        brandInput.dispatchEvent(new Event('change', { bubbles: true }));
-        brandInput.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-
-    function selectModel(modelName) {
-        document.getElementById('selected-model-text').innerText = modelName;
-        document.getElementById('selected-model-text').style.color = '#fff';
-        const modelInput = document.getElementById('car_model');
-        modelInput.value = modelName;
-        document.getElementById('model-options').style.display = 'none';
-        modelInput.dispatchEvent(new Event('input', { bubbles: true }));
+    function toTitleCase(input) {
+        let val = input.value;
+        if (val.length > 0) {
+            // Capitalize first letter, rest small
+            input.value = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+        }
     }
 
     function selectBay(id, text) {
         document.getElementById('real-bay-input').value = id;
         document.getElementById('selected-bay-text').innerText = text;
         document.getElementById('custom-options').style.display = 'none';
-        // Save to localstorage manually
-        localStorage.setItem('booking_parking_slot', id);
-        localStorage.setItem('booking_parking_slot_text', text);
     }
 
     window.addEventListener('click', (e) => {
         if (!e.target.closest('.custom-select-wrapper')) {
             document.getElementById('custom-options').style.display = 'none';
+            document.getElementById('time-options').style.display = 'none';
         }
     });
+
+    function selectTime(timeVal) {
+        document.getElementById('real-time-input').value = timeVal;
+        document.getElementById('selected-time-text').innerText = timeVal;
+        document.getElementById('time-options').style.display = 'none';
+        updateAvailableBays();
+    }
+
+    function updateAvailableBays() {
+        const date = document.getElementById('datePicker').value;
+        const time = document.getElementById('real-time-input').value;
+        const optionsDiv = document.getElementById('custom-options');
+        const selectedBayText = document.getElementById('selected-bay-text');
+        const realBayInput = document.getElementById('real-bay-input');
+
+        if (date && time) {
+            optionsDiv.innerHTML = '<div style="padding: 1.2rem 1.5rem; color: #fff;">Searching available bays...</div>';
+            
+            fetch(`/get-available-bays/?date=${date}&time=${time}&service_id={{ service.id }}`)
+                .then(response => response.json())
+                .then(data => {
+                    optionsDiv.innerHTML = '';
+                    if (data.bays && data.bays.length > 0) {
+                        data.bays.forEach(bay => {
+                            const opt = document.createElement('div');
+                            opt.className = 'custom-option';
+                            opt.style = 'padding: 1.2rem 1.5rem; color: #fff; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);';
+                            opt.innerText = `ELITE BAY ${bay.slot_number}`;
+                            opt.onclick = () => selectBay(bay.id, `ELITE BAY ${bay.slot_number}`);
+                            optionsDiv.appendChild(opt);
+                        });
+                        
+                        // Check if previously selected bay is still available
+                        const savedBayId = localStorage.getItem('booking_parking_slot');
+                        const isStillAvailable = data.bays.some(b => b.id == savedBayId);
+                        if (!isStillAvailable) {
+                            realBayInput.value = '';
+                            selectedBayText.innerText = 'Select Elite Bay';
+                        }
+                    } else {
+                        optionsDiv.innerHTML = '<div style="padding: 1.2rem 1.5rem; color: var(--text-muted);">All Bays Occupied for this slot</div>';
+                        realBayInput.value = '';
+                        selectedBayText.innerText = 'No Bays Available';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching bays:', err);
+                    optionsDiv.innerHTML = '<div style="padding: 1.2rem 1.5rem; color: #ef4444;">Error loading bays. Please retry.</div>';
+                });
+        }
+    }
 
     const form = document.querySelector('form');
-    const fields = ['car_brand', 'car_model', 'car_color', 'car_reg_num', 'service_date'];
+    const fields = ['car_brand', 'car_model', 'car_color', 'car_reg_num', 'service_date', 'service_time'];
 
-    const carModels = {
-        'Aston Martin': ['DBX', 'Vantage', 'DB11', 'DBS Superleggera'],
-        'Audi': ['A4', 'A6', 'A8 L', 'Q3', 'Q5', 'Q7', 'Q8', 'RS e-tron GT', 'RS5', 'RSQ8'],
-        'Bentley': ['Bentayga', 'Continental GT', 'Flying Spur'],
-        'BMW': ['2 Series', '3 Series', '5 Series', '7 Series', 'X1', 'X3', 'X5', 'X7', 'Z4', 'M2', 'M4', 'iX'],
-        'BYD': ['Atto 3', 'e6', 'Seal'],
-        'Citroen': ['C3', 'eC3', 'C3 Aircross', 'C5 Aircross'],
-        'Ferrari': ['296 GTB', 'SF90 Stradale', 'Roma', 'F8 Tributo', 'Purosangue'],
-        'Ford': ['Endeavour', 'Mustang', 'EcoSport'],
-        'Honda': ['Amaze', 'City', 'Elevate'],
-        'Hyundai': ['Grand i10 Nios', 'i20', 'Aura', 'Venue', 'Verna', 'Creta', 'Alcazar', 'Tucson', 'Ioniq 5'],
-        'Isuzu': ['D-Max', 'V-Cross', 'MU-X'],
-        'Jaguar': ['F-PACE', 'I-PACE', 'F-TYPE'],
-        'Jeep': ['Compass', 'Meridian', 'Wrangler', 'Grand Cherokee'],
-        'Kia': ['Sonet', 'Seltos', 'Carens', 'EV6'],
-        'Lamborghini': ['Urus', 'Huracan', 'Revuelto', 'Aventador'],
-        'Land Rover': ['Range Rover', 'Defender', 'Range Rover Sport', 'Velar', 'Evoque', 'Discovery'],
-        'Lexus': ['ES', 'NX', 'RX', 'LX', 'LC 500'],
-        'Mahindra': ['Thar', 'XUV300', 'XUV700', 'Scorpio-N', 'Scorpio Classic', 'Bolero'],
-        'Maruti Suzuki': ['Alto K10', 'Swift', 'Baleno', 'Dzire', 'Brezza', 'Ertiga', 'Grand Vitara', 'Fronx', 'Jimny'],
-        'Maserati': ['Ghibli', 'Levante', 'Quattroporte', 'MC20'],
-        'McLaren': ['GT', 'Artura', '720S', '750S'],
-        'Mercedes-Benz': ['A-Class', 'C-Class', 'E-Class', 'S-Class', 'GLA', 'GLC', 'GLE', 'GLS', 'G-Class', 'Maybach'],
-        'MG': ['Astor', 'Hector', 'Gloster', 'Comet EV', 'ZSEV'],
-        'MINI': ['Cooper', 'Countryman'],
-        'Nissan': ['Magnite', 'Kicks', 'GTR'],
-        'Porsche': ['911 GT3', '911 Carrera', 'Taycan', 'Panamera', 'Macan', 'Cayenne', '718 Cayman', '718 Boxster'],
-        'Renault': ['Kwid', 'Triber', 'Kiger'],
-        'Rolls-Royce': ['Ghost', 'Phantom', 'Cullinan', 'Spectre'],
-        'Skoda': ['Slavia', 'Kushaq', 'Octavia', 'Superb', 'Kodiaq'],
-        'Tata': ['Tiago', 'Altroz', 'Punch', 'Nexon', 'Harrier', 'Safari'],
-        'Toyota': ['Glanza', 'Urban Cruiser Hyryder', 'Innova Crysta', 'Innova Hycross', 'Fortuner', 'Camry', 'Vellfire'],
-        'Volkswagen': ['Virtus', 'Taigun', 'Tiguan'],
-        'Volvo': ['XC40', 'XC60', 'XC90', 'S90', 'C40 Recharge']
-    };
-
-    // Initialize Brand Options
-    const brandNames = Object.keys(carModels).sort();
-    const brandOptionsDiv = document.getElementById('brand-options');
-    brandNames.forEach(brand => {
-        const opt = document.createElement('div');
-        opt.className = 'custom-option';
-        opt.style = 'padding: 1.2rem 1.5rem; color: #fff; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);';
-        opt.innerText = brand;
-        opt.onclick = () => selectBrand(brand);
-        brandOptionsDiv.appendChild(opt);
-    });
-
-    const brandSelectHidden = document.getElementById('car_brand');
-    const modelOptionsDiv = document.getElementById('model-options');
-
-    brandSelectHidden.addEventListener('change', function() {
-        const brand = this.value;
-        modelOptionsDiv.innerHTML = '';
-        document.getElementById('selected-model-text').innerText = 'Select Model';
-        document.getElementById('selected-model-text').style.color = '#94a3b8'; // Muted
-        document.getElementById('car_model').value = '';
-
-        if (brand && carModels[brand]) {
-            carModels[brand].sort().forEach(model => {
-                const opt = document.createElement('div');
-                opt.className = 'custom-option';
-                opt.style = 'padding: 1.2rem 1.5rem; color: #fff; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05);';
-                opt.innerText = model;
-                opt.onclick = () => selectModel(model);
-                modelOptionsDiv.appendChild(opt);
-            });
-        }
-    });
 
     // Load saved data
+    // No longer using localStorage for form persistence as per requirement
     window.addEventListener('load', () => {
-        fields.forEach(field => {
-            const savedValue = localStorage.getItem(`booking_${field}`);
-            if (savedValue) {
-                const input = document.querySelector(`[name="${field}"]`);
-                if (input) {
-                    if (field === 'service_date' && input._flatpickr) {
-                        input._flatpickr.setDate(savedValue);
-                    } else if (field === 'car_brand') {
-                        selectBrand(savedValue);
-                    } else if (field === 'car_model') {
-                        setTimeout(() => selectModel(savedValue), 50); // Small timeout allows brand model injection first
-                    } else {
-                        input.value = savedValue;
-                    }
-                }
-            }
-        });
+        // Just initialize fresh
+        updateAvailableBays();
     });
 
     form.addEventListener('input', (e) => {
@@ -399,16 +349,6 @@
             if (val.length > 6) formatted += '-' + val.substring(6, 10);
             e.target.value = formatted;
         }
-
-        if (fields.includes(e.target.name)) {
-            localStorage.setItem(`booking_${e.target.name}`, e.target.value);
-        }
-    });
-
-    form.addEventListener('submit', () => {
-        fields.forEach(field => {
-            localStorage.removeItem(`booking_${field}`);
-        });
     });
 </script>
 {% endblock %}

@@ -18,7 +18,7 @@
                     <div>
                         <h2 style="font-size: 1.8rem; color: #fff; margin-bottom: 0.5rem; letter-spacing: -1px;">{{ booking.service.service_name }}</h2>
                         <p style="color: var(--text-muted); font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
-                            <i class="fas fa-calendar-alt" style="color: var(--primary);"></i> Scheduled for {{ booking.service_date|date:"l, F j, Y" }}
+                            <i class="fas fa-calendar-alt" style="color: var(--primary);"></i> Scheduled for {{ booking.service_date|date:"l, F j, Y" }} at <span style="color: #fff; font-weight: 700; margin-left: 5px;">{{ booking.service_time }}</span>
                         </p>
                     </div>
                     <div style="text-align: right;">

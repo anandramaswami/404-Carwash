@@ -8,6 +8,70 @@ from customers.models import Customers
 from services.models import Services
 from parking.models import Parking_Slots
 from bookings.models import Booking_History
+from django.http import JsonResponse
+
+from datetime import datetime, timedelta
+
+def is_bay_available(parking_id, s_date, s_time_str, duration_mins):
+    try:
+        # Dummy dates for timedelta math
+        req_start_dt = datetime.strptime(s_time_str, '%I:%M %p')
+        req_end_dt = req_start_dt + timedelta(minutes=duration_mins)
+        req_start_t = req_start_dt.time()
+        req_end_t = req_end_dt.time()
+    except:
+        return False
+
+    # We ignore the global is_available flag for schedule-aware filtering
+    # but still use it for admin visual status.
+    # To avoid future blocking, we'll assume is_available=True if no booking overlaps.
+
+    # 2. Check for overlapping bookings on the same date
+    conflicts = Booking_History.objects.filter(
+        parking_id=parking_id,
+        service_date=s_date,
+        booking_status__in=['Pending', 'Booked']
+    ).select_related('service')
+
+    for b in conflicts:
+        try:
+            b_start_dt = datetime.strptime(b.service_time, '%I:%M %p')
+            b_dur = b.service.duration_minutes if b.service else 120
+            b_end_dt = b_start_dt + timedelta(minutes=b_dur)
+            
+            if req_start_t < b_end_dt.time() and b_start_dt.time() < req_end_t:
+                return False
+        except:
+            continue
+    return True
+
+def get_available_bays(request):
+    s_date_str = request.GET.get('date')
+    s_time_str = request.GET.get('time')
+    service_id = request.GET.get('service_id')
+    
+    if not (s_date_str and s_time_str):
+        return JsonResponse({'bays': []})
+        
+    s_date = parse_date(s_date_str)
+    if not s_date:
+        return JsonResponse({'bays': []})
+
+    req_duration = 120
+    if service_id:
+        svc = Services.objects.filter(id=service_id).first()
+        if svc:
+            req_duration = svc.duration_minutes
+
+    # Get all potential bays
+    all_bays = Parking_Slots.objects.all()
+    available_list = []
+    
+    for bay in all_bays:
+        if is_bay_available(bay.id, s_date, s_time_str, req_duration):
+            available_list.append({'id': bay.id, 'slot_number': bay.slot_number})
+            
+    return JsonResponse({'bays': available_list})
 
 def home(request):
     return render(request, 'home.html')
@@ -84,7 +148,7 @@ def book_service(request, service_id):
         return redirect('home')
         
     service = get_object_or_404(Services, id=service_id)
-    available_slots = Parking_Slots.objects.filter(is_available=True)
+    available_slots = Parking_Slots.objects.all()
     
     if request.method == 'POST':
         c_brand = request.POST.get('car_brand')
@@ -92,9 +156,14 @@ def book_service(request, service_id):
         c_color = request.POST.get('car_color')
         c_reg = request.POST.get('car_reg_num')
         s_date_str = request.POST.get('service_date')
+        s_time_str = request.POST.get('service_time')
         parking_slot_id = request.POST.get('parking_slot')
         
         s_date = parse_date(s_date_str)
+        
+        if not is_bay_available(parking_slot_id, s_date, s_time_str, service.duration_minutes):
+            messages.error(request, f'This bay is no longer available for the chosen date and time. Please pick another.')
+            return redirect('book_service', service_id=service.id)
         
         # Get customer profile
         customer = Customers.objects.filter(user=request.user).first()
@@ -104,6 +173,7 @@ def book_service(request, service_id):
             'service_id': service.id,
             'parking_slot_id': parking_slot_id,
             'service_date': s_date_str,
+            'service_time': s_time_str,
             'car_brand': c_brand,
             'car_model': c_model,
             'car_color': c_color,
@@ -112,7 +182,7 @@ def book_service(request, service_id):
         
         return redirect('process_payment')
 
-    return render(request, 'book_service.html', {'service': service, 'available_slots': available_slots})
+    return render(request, 'book_service.html', {'service': service})
 
 @login_required
 def process_payment(request):
@@ -130,6 +200,7 @@ def process_payment(request):
             self.id = Booking_History.objects.count() + 1
             self.service = service
             self.service_date = parse_date(data['service_date'])
+            self.service_time = data.get('service_time', '10:00 AM')
             self.car_brand = data['car_brand']
             self.car_model = data['car_model']
             self.car_color = data['car_color']
@@ -145,11 +216,9 @@ def process_payment(request):
         parking_slot = None
         if data['parking_slot_id']:
             parking_slot = get_object_or_404(Parking_Slots, id=data['parking_slot_id'])
-            if parking_slot.is_available:
-                parking_slot.is_available = False
-                parking_slot.save()
-            else:
-                messages.error(request, 'This parking slot was just booked by someone else. Please start again.')
+            
+            if not is_bay_available(data['parking_slot_id'], booking.service_date, booking.service_time, service.duration_minutes):
+                messages.error(request, 'This parking slot was just booked by someone else for that time. Please start again.')
                 return redirect('book_service', service_id=service.id)
                 
         import uuid
@@ -158,6 +227,7 @@ def process_payment(request):
             service=service,
             parking=parking_slot,
             service_date=booking.service_date,
+            service_time=booking.service_time,
             car_brand=booking.car_brand,
             car_model=booking.car_model,
             car_color=booking.car_color,
@@ -166,6 +236,11 @@ def process_payment(request):
             payment_status='Paid',
             payment_id=str(uuid.uuid4())
         )
+        
+        # Mark bay as occupied in real-time
+        if parking_slot:
+            parking_slot.is_available = False
+            parking_slot.save()
         
         if 'pending_booking_data' in request.session:
             del request.session['pending_booking_data']
@@ -235,15 +310,15 @@ def dashboard_bookings(request):
                 else:
                     booking.booking_status = new_status
                     
-                    # Dynamic Parking Slot Management - Release when Completed/Cancelled
+                    # Synchronize real-time status as requested
                     if booking.parking:
                         parking = booking.parking
-                        if new_status == 'Booked':
+                        if new_status in ['Booked', 'Pending']:
                             parking.is_available = False
                         elif new_status in ['Completed', 'Cancelled']:
                             parking.is_available = True
                         parking.save()
-                    
+
                     booking.save()
                     messages.success(request, f'Booking status updated to {new_status}.')
             except Booking_History.DoesNotExist:
